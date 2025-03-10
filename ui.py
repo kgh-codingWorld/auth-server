@@ -4,9 +4,12 @@ import requests
 # Gradio 인증 함수
 def authenticate(username, password):
     try:
-        response = requests.post(f"http://127.0.0.1:8000/login?username={username}&password={password}")
+        response = requests.post(f"http://127.0.0.1:8000/login", json={"username": username, "password": password},
+                                 headers={"Content-Type": "application/json"})
         if response.status_code == 200:
-            return f"인증 성공, API Key: {response.json()['api_key']}"
+            data = response.json()
+            api_key = data.get("api_key", "API Key 없음")
+            return f"인증 성공, API Key: {api_key}"
         else:
             print(response.json())
             return f"인증 실패: {response.json()['detail']}"
