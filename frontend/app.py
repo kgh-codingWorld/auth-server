@@ -1,7 +1,7 @@
 import gradio   as gr
-from login_ui   import login_ui
-from api_key_ui import api_key_ui
-from feature_ui import feature_ui
+from gui.login_ui   import login_ui
+from gui.api_key_ui import api_key_ui
+from gui.feature_ui import feature_ui
 
 login_demo, token_output        = login_ui()                                # token_output 반환
 api_key_demo, api_key_output    = api_key_ui(token_output)                  # 반환된 token_output 이용, api_key 반환

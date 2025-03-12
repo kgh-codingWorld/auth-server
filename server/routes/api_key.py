@@ -1,7 +1,7 @@
-from fastapi        import APIRouter, HTTPException, Header
+from fastapi import APIRouter, HTTPException, Header
 import secrets
-from routes.auth    import ACCESS_TOKENS
-from typing         import Dict
+from routes.auth import ACCESS_TOKENS
+from typing import Dict
 
 router = APIRouter()
 
