@@ -3,3 +3,6 @@ import hashlib # SHA, MD5 등의 해시 알고리즘 제공하는 Python 내장 
 # 비밀번호 암호화
 def hash_password(password: str) -> str:
     return hashlib.sha256(password.encode()).hexdigest()
+
+test_password = "password1"
+hashed = hash_password(test_password)

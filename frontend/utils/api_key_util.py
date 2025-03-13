@@ -1,5 +1,5 @@
 import requests
-from configs.config import BASE_URL
+from ..configs.config import BASE_URL
 
 def get_api_key(access_token):
     try:

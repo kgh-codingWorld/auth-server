@@ -1,5 +1,5 @@
 import gradio as gr # Gradio UI 라이브러리
-from utils.login_util import login
+from ..utils.login_util import login
 
 # Gradio UI 정의 (로그인 화면)
 def login_ui():

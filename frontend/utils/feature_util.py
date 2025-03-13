@@ -1,5 +1,5 @@
 import requests
-from configs.config import BASE_URL
+from ..configs.config import BASE_URL
 
 def access_feature(access_token, api_key, feature_name):
     headers = {"Access-Token": access_token, "API-Key": api_key}
