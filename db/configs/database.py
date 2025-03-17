@@ -1,6 +1,9 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from db.models import Base
+import logging
+
+logger = logging.getLogger(__name__)
 
 # 연결할 DB URL
 SQLALCHEMY_DATABASE_URL = "postgresql://postgres:postgres@localhost:5432/postgres"
@@ -16,9 +19,11 @@ def get_db():
     Base.metadata.create_all(bind=engine)
     try:
         yield db
-    except:
+    except Exception as e:
+        logger.exception(f"데이터베이스 연결 중 오류 발생: {e}")
+        raise # 예외 정상 처리하도록 다시 던짐
+    finally:
         db.close()
-
 
 if __name__ == "__main__":
     print("테이블 생성하는 중...")

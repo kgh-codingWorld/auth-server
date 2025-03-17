@@ -12,5 +12,9 @@ class SignUpRequest(BaseModel):
 
 class FeatureRequest(BaseModel):
     name: str
-    description: str
-    user_id: str
+    description: str | None = None
+
+class UserFeatureRequest(BaseModel):
+    name: str
+    username: str
+    feature_id: int

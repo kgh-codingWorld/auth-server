@@ -1,12 +1,12 @@
 import requests
-from ..configs.config import BASE_URL
+from frontend.configs.base_url_config import BASE_URL
 
-def add_feature(access_token, name, description, user_id):
+def add_feature(access_token, name, description, username):
     try:
         headers = {"Access-Token": access_token, "Content-Type": "application/json"}
         response = requests.post(
-            f"{BASE_URL}/admin/add-feature",
-            json={"name": name, "description": description, "user_id": user_id},
+            f"{BASE_URL}/admin/feature/add",
+            json={"name": name, "description": description, "username": username},
             headers=headers
         )
 

@@ -1,5 +1,5 @@
 import gradio as gr
-from ..utils.sign_up_util import sign_up
+from frontend.utils.sign_up_util import sign_up
 
 def sign_up_ui():
     with gr.Blocks() as sign_up_demo:

@@ -46,4 +46,5 @@ class UserFeature(Base):
     id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"))
     feature_id = Column(Integer, ForeignKey("features.id", ondelete="CASCADE"))
+    api_key_id = Column(Integer, ForeignKey("api_keys.id", ondelete="CASCADE"))
     assigned_at = Column(TIMESTAMP, default=lambda: datetime.now(timezone.utc), nullable=False)

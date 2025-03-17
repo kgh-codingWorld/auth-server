@@ -1,5 +1,5 @@
 import gradio as gr
-from ..utils.api_key_util import get_api_key
+from frontend.utils.api_key_util import get_api_key
     
 def api_key_ui(token_output):
     with gr.Blocks() as api_key_demo:
