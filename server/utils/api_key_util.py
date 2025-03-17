@@ -35,5 +35,5 @@ def get_api_key_id_by_user_id(user_id:int, db: Session):
     api_key_data = db.query(APIKey).filter(APIKey.user_id == user_id).first()
     if not api_key_data:
         logger.warning("존재하지 않는 API Key")
-        raise HTTPException(status_code=403, detail="존재하지 않는 API Key")
+        raise HTTPException(status_code=403, detail="기능 구독을 위해서 API Key를 먼저 발급해 주세요.")
     return api_key_data.id

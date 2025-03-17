@@ -11,14 +11,22 @@ def add_feature_subscribe(user_id: int, feature_name: str, api_key: str, db: Ses
     try:
         feature_id = get_feature_id_by_name(feature_name, db)
         api_key_id = get_api_key_id_by_user_id(user_id, db)
-        if had_subscription is None:
-            new_subsribe = UserFeature(user_id=user_id, feature_id=feature_id, api_key_id=api_key_id)
-            db.add(new_subsribe)
-            db.commit()
-            db.refresh(new_subsribe)
-            logger.info(f"{user_id}가 기능 {feature_name}를 구독함")
 
-            return {"message": f"기능 {feature_name} 구독 성공"}
+        if had_subscription(user_id, feature_name, db):
+            logger.warning(f"{user_id}는 이미 {feature_name}을 구독하고 있음")
+            raise HTTPException(status_code=400, detail=f"이미 {feature_name} 기능을 구독하고 있습니다.")
+        
+        new_subsribe = UserFeature(user_id=user_id, feature_id=feature_id, api_key_id=api_key_id)
+        db.add(new_subsribe)
+        db.commit()
+        db.refresh(new_subsribe)
+        logger.info(f"{user_id}가 기능 {feature_name}를 구독함")
+
+        return {"message": f"기능 {feature_name} 구독 성공"}
+    
+    except HTTPException as http_ex:
+        raise http_ex
+
     except Exception as e:
         db.rollback()
         logger.exception(f"기능 구독 중 오류 발생: {e}")
@@ -29,5 +37,4 @@ def had_subscription(user_id: int, feature_name: str, db: Session):
     had_subscribe = db.query(UserFeature).filter(UserFeature.user_id == user_id, UserFeature.feature_id == feature_id).first()
     if had_subscribe:
         logger.warning(f"{user_id}는 이미 해당 {feature_name}를 구독함")
-        raise HTTPException(status_code=400, detail="이미 해당 기능을 구독하였습니다.")
     return had_subscribe is not None

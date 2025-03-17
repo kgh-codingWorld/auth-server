@@ -16,9 +16,10 @@ def feature_ui(token_output, api_key_output):
         subscription_btn = gr.Button("해당 기능 구독하기")
         access_btn = gr.Button("기능 접근 테스트")
         refresh_btn = gr.Button("🔄 기능 목록 새로고침")
+        subscribe_output = gr.Textbox(label="구독 결과")
         access_output = gr.Textbox(label="기능 접근 결과")
 
-        subscription_btn.click(feature_subscribe, inputs=[token_output, api_key_output, feature_name_input], outputs=feature_name_input)
+        subscription_btn.click(feature_subscribe, inputs=[token_output, api_key_output, feature_name_input], outputs=subscribe_output)
         access_btn.click(feature_access, inputs=[token_output, api_key_output, feature_name_input], outputs=access_output)
         refresh_btn.click(update_feature_list, outputs=feature_name_input)
 
