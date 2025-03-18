@@ -124,44 +124,44 @@ Docker Desktop에서 PostgreSQL 데이터베이스에 직접 접근하는 방법
 docker exec -it auth-server_postgres_1 bash
 ```
 
-1. **PostgreSQL 쉘(`psql`) 실행**
+2. **PostgreSQL 쉘(`psql`) 실행**
 
 ```
 psql -U postgres
 ```
 
 - `postgres` 데이터베이스에 로그인됨
-1. **데이터베이스 목록 확인**
+3. **데이터베이스 목록 확인**
 
 ```
 \l
 ```
 
-1. **현재 사용 중인 데이터베이스 확인**
+4. **현재 사용 중인 데이터베이스 확인**
 
 ```
 SELECT current_database();
 ```
 
-1. **테이블 목록 확인**
+5. **테이블 목록 확인**
 
 ```
 \dt
 ```
 
-1. **테이블 데이터 조회 (예: users 테이블)**
+6. **테이블 데이터 조회 (예: users 테이블)**
 
 ```
 SELECT * FROM users;
 ```
 
-1. **PostgreSQL에서 나가기**
+7. **PostgreSQL에서 나가기**
 
 ```
 \q
 ```
 
-1. **컨테이너에서 나가기**
+8. **컨테이너에서 나가기**
 
 ```
 exit
