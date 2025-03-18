@@ -2,7 +2,7 @@
 
 FastAPI 기반 API 인증 및 접근 제어 시스템입니다. 사용자는 Access Token으로 API를 인증하고, API Key로 특정 기능 접근을 제어할 수 있습니다.
 
-이 프로젝트는 FastAPI, PostgreSQL, SQLAlchemy, Gradio를 기반으로 하며, Docker 환경에서 실행 가능하도록 설계되었습니다.
+이 프로젝트는 FastAPI**,** PostgreSQL**,** SQLAlchemy**,** Gradio를 기반으로 하며, Docker 환경에서 실행 가능하도록 설계되었습니다.
 
 > ⚠️ 이 프로젝트는 **Docker Desktop** 환경을 전제로 작성되었습니다.
 설치 및 실행 전에 Docker Desktop이 반드시 설치되어 있고, 실행 중인지 확인하세요.
@@ -196,56 +196,222 @@ pip install python-dotenv
 python -m db.configs.database
 ```
 
-## API 사용법
+## 기능별 사용방법
 
 ---
 
-### 인증 요청
+### 프로젝트 구조
 
-- 로그인(`POST /auth/login`)
-- 요청 예시:
-    
-    ```bash
-    {
-    	"username": "user1",
-    	"password": "password1"
-    }
-    ```
-    
-- 응답 예시:
-    
-    ```bash
-    {
-      "access_token": "eyJhbGciOiJI...",
-      "token_type": "bearer"
-    }
-    ```
-    
+```bash
+project_root/
+│── db/
+│   ├── configs/
+│   │   ├── database.py           # 데이터베이스 설정
+│   ├── models.py                 # 데이터베이스 모델 정의
+│   ├── docker-compose.yaml       # Docker 설정
+│
+│── frontend/
+│   ├── gui/
+│   │   ├── api_key_ui.py         # API Key 발급 UI
+│   │   ├── feature_admin_ui.py   # 관리자 기능 추가 UI
+│   │   ├── feature_ui.py         # 기능 구독 및 접근 UI
+│   │   ├── login_ui.py           # 로그인 UI
+│   │   ├── sign_up_ui.py         # 회원가입 UI
+│   ├── utils/
+│   │   ├── api_key_util.py       # API Key 요청 처리
+│   │   ├── feature_access_util.py # 기능 접근 요청 처리
+│   │   ├── feature_admin_util.py  # 관리자 기능 추가 처리
+│   │   ├── feature_subscribe_util.py # 기능 구독 요청 처리
+│   │   ├── login_util.py         # 로그인 요청 처리
+│   │   ├── sign_up_util.py       # 회원가입 요청 처리
+│   ├── .env                      # 환경 변수 설정
+│   │── app.py                        # FastAPI 실행 엔트리포인트
+│
+│── server/
+│   ├── error/
+│   │   ├── exception_handler.py  # 예외 처리
+│   ├── models/
+│   │   ├── request_model.py      # Pydantic 데이터 모델 정의
+│   │   ├── response_model.py     # API 응답 모델 정의
+│   ├── routes/
+│   │   ├── api_key.py            # API Key 관련 라우트
+│   │   ├── auth.py               # 로그인/회원가입 라우트
+│   │   ├── feature_access.py     # 기능 접근 라우트
+│   │   ├── feature_admin.py      # 관리자 기능 추가 라우트
+│   │   ├── feature_subscribe.py  # 기능 구독 라우트
+│   │   ├── sign_up.py            # 회원가입 라우트
+│   ├── utils/
+│   │   ├── admin_utils/
+│   │   │   ├── feature_admin_util.py # 관리자 기능 관리 유틸리티
+│   │   ├── feature_utils/
+│   │   │   ├── feature_access_util.py # 기능 접근 유틸리티
+│   │   │   ├── feature_query.py   # 기능 조회 유틸리티
+│   │   │   ├── feature_subscribe_util.py # 기능 구독 유틸리티
+│   │   ├── access_token_util.py   # Access Token 관련 유틸리티
+│   │   ├── api_key_util.py        # API Key 관련 유틸리티
+│   │   ├── auth_util.py           # 인증 관련 유틸리티
+│   │   ├── password_hash_util.py  # 비밀번호 해싱 유틸리티
+│   │   ├── sign_up_util.py        # 회원가입 유틸리티
+│   │── main.py                       # 메인 실행 파일
+│
+│── .gitignore                    # Git 무시 파일
 
-### API Key 발급
+```
 
-- API Key 요청(`POST /api_key/generate`)
-- 헤더 예시:
-    
-    ```python
-    {
-    	Access-Token: your_access_token
-    }
-    ```
-    
+### 회원가입 및 로그인 인증 시스템
 
-### 기능 접근 제어
+- **주요 기능 설명**
+    - 회원가입 API (`POST /signup/`)
+        - 새로운 사용자를 등록하는 API입니다.
+        - “is_admin”이 False면 일반 회원, True면 관리자 권한
+        - 요청 예시
+        
+        ```
+        {
+            "username": "testuser",
+            "password": "password123",
+            "is_admin": false
+        }
+        ```
+        
+        - 응답 예시
+        
+        ```
+        {
+            "message": "회원가입 성공"
+        }
+        ```
+        
+    - 로그인 API (`POST /auth/login`)
+        - 로그인을 수행하고, Access Token을 발급합니다.
+        - 요청 예시
+        
+        ```
+        {
+            "username": "testuser",
+            "password": "password123"
+        }
+        ```
+        
+        - 응답 예시
+        
+        ```
+        {
+            "message": "인증 성공",
+            "access_token": "abcd1234efgh5678",
+            "is_admin": false
+        }
+        ```
+        
+    - Access Token 검증 (`validate_access_token`)
+        - 사용자의 인증 상태를 확인하는 기능입니다. 인증이 만료되었거나 잘못된 경우 로그인 상태를 갱신해야 합니다.
+        - 요청 예시
+        
+        ```
+        curl -X POST "http://127.0.0.1:8000/auth/token/validate" \
+             -H "Access-Token: abcd1234efgh5678"
+        ```
+        
+        - 응답 예시 (유효한 경우)
+        
+        ```
+        {
+            "message": "Access Token이 유효합니다.",
+        }
+        ```
+        
+        - 응답 예시 (만료된 경우)
+        
+        ```bash
+        {
+            "detail": "로그아웃 상태입니다. 로그인 또는 회원가입을 진행해 주세요."
+        }
+        ```
+        
 
-- 기능 접근 요청(`POST /feature/access/{feature_name}`)
-- 헤더 예시:
-    
-    ```python
-    {
-    	Access-Token: your_access_token,
-    	API-Key: your_api_key
-    }
-    ```
-    
+### API 사용법
+
+- **주요 기능 설명**
+    - API Key 발급 (`POST /api-key/generate`)
+        - 사용자가 Access Token을 이용하여 API Key를 요청하면, 새로운 API Key를 발급받을 수 있습니다.
+        - 요청 예시
+        
+        ```
+        curl -X POST "http://127.0.0.1:8000/api-key/generate" -H "Access-Token: abcd1234efgh5678"
+        ```
+        
+    - 응답 예시
+        
+        ```
+        {
+            "message": "API Key 발급 성공",
+            "api_key": "1234567890abcdef"
+        }
+        ```
+        
+
+### 기능 접근 및 구독
+
+- 주요 기능 설명
+    - 기능 구독 (`POST /feature/subscribe/{feature_name}`)
+        - 사용자가 특정 기능을 구독할 수 있습니다.
+        - 요청 예시
+        
+        ```
+        curl -X POST "http://127.0.0.1:8000/feature/subscribe/예제기능" \
+             -H "Access-Token: abcd1234efgh5678" \
+             -H "API-Key: 1234567890abcdef"
+        ```
+        
+        - 응답 예시
+        
+        ```
+        {
+            "message": "기능 예제기능 구독 성공"
+        }
+        ```
+        
+    - 기능 접근 (`POST /feature/access/{feature_name}`)
+        - 구독한 기능에 대한 접근 권한을 확인합니다.
+        - 요청 예시
+        
+        ```
+        curl -X POST "http://127.0.0.1:8000/feature/access/예제기능" \
+             -H "Access-Token: abcd1234efgh5678" \
+             -H "API-Key: 1234567890abcdef"
+        ```
+        
+        - 응답 예시
+        
+        ```bash
+        {
+            "message": "기능 접근 허용됨"
+        }
+        ```
+        
+
+### 관리자 기능 관리
+
+- 주요 기능 설명
+    - 기능 추가(`POST /admin/feature/add`)
+        - 관리자가 새로운 기능을 추가할 수 있습니다.
+        - 요청 예시:
+        
+        ```bash
+        curl -X POST "http://127.0.0.1:8000/admin/feature/add" \
+             -H "Access-Token: abcd1234efgh5678" \
+             -H "Content-Type: application/json" \
+             -d '{"name": "새로운 기능", "description": "기능 설명", "username": "admin"}'
+        ```
+        
+        - 응답 예시:
+        
+        ```bash
+        {
+            "message": "기능 추가 성공"
+        }
+        ```
+        
 
 ## 배포 방법
 
