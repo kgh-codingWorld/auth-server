@@ -1,3 +1,5 @@
+## 📂 db/README.md
+
 # Database (PostgreSQL)
 
 이 폴더는 **PostgreSQL 데이터베이스 설정 및 관련 스크립트**를 포함하고 있습니다.
