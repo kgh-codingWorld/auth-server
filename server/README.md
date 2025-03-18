@@ -41,8 +41,7 @@ server/
 ### 1️. 환경 설정 및 패키지 설치
 
 ```bash
-bash
-복사편집
+
 python -m venv venv
 source venv/bin/activate  # Windows: venv\Scripts\activate
 pip install -r requirements.txt
@@ -52,8 +51,7 @@ pip install -r requirements.txt
 ### 2️. FastAPI 서버 실행
 
 ```bash
-bash
-복사편집
+
 uvicorn server.main:app --host 0.0.0.0 --port 8000
 
 ```
@@ -68,7 +66,7 @@ uvicorn server.main:app --host 0.0.0.0 --port 8000
 ## 🔑 인증 시스템
 
 ### 1️. 회원가입 API
-
+요청 예시:
 ```
 POST /signup/
 
@@ -78,12 +76,18 @@ POST /signup/
 {
   "username": "testuser",
   "password": "password123",
-  "is_admin": false}
-
+  "is_admin": false
+}
+```
+응답 예시:
+```json
+{
+  "message": "회원가입 성공"
+}
 ```
 
 ### 2️. 로그인 API
-
+요청 예시:
 ```
 
 POST /auth/login
@@ -98,13 +102,12 @@ POST /auth/login
 }
 
 ```
-
-### 응답 예시
+응답 예시:
 
 ```json
-json
-복사편집
+
 {
+  "message": "인증 성공",
   "access_token": "abcd1234efgh5678",
   "is_admin": false}
 
@@ -112,4 +115,9 @@ json
 
 ---
 
-## 🔧 문제 해결
+## 문제 해결
+| **문제** | **해결 방법** |
+| --- | --- |
+| FastAPI 서버 실행 오류 | `.env` 파일이 존재하는지 확인하고 환경 변수 설정 |
+| 로그인 시 `401 Unauthorized` 오류 발생 | 데이터베이스에 사용자가 존재하는지 확인 |
+| 8000 포트 충돌 | `lsof -i :8000` (Mac/Linux) 또는 `netstat -ano |
